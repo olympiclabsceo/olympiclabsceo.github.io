@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мобильная игра</title>
+    <style>
+        body { margin: 0; overflow: hidden; text-align: center; }
+        canvas { background: lightblue; display: block; }
+        #shootBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px;
+            font-size: 20px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<button id="shootBtn">Стрелять</button>
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const player = { x: canvas.width / 2, y: canvas.height - 50, size: 30, targetX: canvas.width / 2, targetY: canvas.height - 50 };
+    const enemy = { x: canvas.width / 2, y: 50, size: 30, alive: true, speed: 2 };
+    let bullets = [];
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "blue";
+        ctx.fillRect(player.x - player.size / 2, player.y - player.size / 2, player.size, player.size);
+        if (enemy.alive) {
+            ctx.fillStyle = "black";
+            ctx.fillRect(enemy.x - enemy.size / 2, enemy.y - enemy.size / 2, enemy.size, enemy.size);
+        }
+        ctx.fillStyle = "red";
+        bullets.forEach(bullet => ctx.fillRect(bullet.x - 5, bullet.y - 10, 10, 20));
+    }
+
+    function update() {
+        player.x += (player.targetX - player.x) * 0.5;
+        player.y += (player.targetY - player.y) * 0.5;
+
+        bullets.forEach((bullet, index) => {
+            bullet.y -= 5;
+            if (bullet.y < 0) bullets.splice(index, 1);
+            if (enemy.alive && bullet.x > enemy.x - enemy.size / 2 && bullet.x < enemy.x + enemy.size / 2 &&
+                bullet.y > enemy.y - enemy.size / 2 && bullet.y < enemy.y + enemy.size / 2) {
+                enemy.alive = false;
+                bullets.splice(index, 1);
+            }
+        });
+
+        if (enemy.alive) {
+            enemy.x += (Math.random() - 0.5) * enemy.speed;
+            enemy.x = Math.max(enemy.size / 2, Math.min(canvas.width - enemy.size / 2, enemy.x));
+        }
+    }
+
+    function gameLoop() {
+        update();
+        draw();
+        requestAnimationFrame(gameLoop);
+    }
+    gameLoop();
+
+    let touchStartX = 0, touchStartY = 0;
+    canvas.addEventListener("touchstart", (e) => {
+        setTimeout(() => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, 150)
+
+
+    });
+    canvas.addEventListener("touchmove", (e) => {
+        setTimeout(() => {
+            let deltaX = e.touches[0].clientX - touchStartX;
+            let deltaY = e.touches[0].clientY - touchStartY;
+            player.targetX = Math.max(player.size / 2, Math.min(canvas.width - player.size / 2, player.x + deltaX));
+            player.targetY = Math.max(canvas.height / 2, Math.min(canvas.height - player.size / 2, player.y + deltaY));
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, 150)
+
+    });
+
+    document.getElementById("shootBtn").addEventListener("click", () => {
+        bullets.push({ x: player.x, y: player.y - player.size });
+    });
+</script>
+</body>
+</html>
