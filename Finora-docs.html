@@ -1,0 +1,1025 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinoraPay API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #5e35b1;
+            margin-top: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        h1 {
+            font-size: 32px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eaecef;
+        }
+        h2 {
+            font-size: 24px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eaecef;
+        }
+        h3 {
+            font-size: 20px;
+        }
+        pre {
+            background-color: #f6f8fa;
+            border-radius: 3px;
+            padding: 16px;
+            overflow: auto;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+        }
+        code {
+            background-color: rgba(27,31,35,.05);
+            border-radius: 3px;
+            padding: 0.2em 0.4em;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            color: #5e35b1;
+        }
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        blockquote {
+            border-left: 4px solid #3f51b5;
+            padding: 0 15px;
+            margin: 16px 0;
+            color: #777;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #e8eaf6;
+            color: #333;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        a {
+            color: #3f51b5;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        img {
+            max-width: 100%;
+        }
+        .highlight {
+            background-color: #e8eaf6;
+            border-left: 4px solid #3f51b5;
+            padding: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Документация API платформы FinoraPay</h1>
+<p><img alt="FinoraPay Logo" src="https://finorapay.io/logo.png" /></p>
+<style>
+body {
+  background-color: #f8f9fa;
+}
+h1, h2, h3 {
+  color: #5e35b1;
+}
+a {
+  color: #3f51b5;
+}
+.highlight {
+  background-color: #e8eaf6;
+  border-left: 4px solid #3f51b5;
+  padding: 10px;
+}
+code {
+  color: #5e35b1;
+}
+</style>
+
+<h2>Содержание</h2>
+<ul>
+<li><a href="#введение">Введение</a></li>
+<li><a href="#структура-api">Структура API</a></li>
+<li><a href="#аутентификация">Аутентификация</a></li>
+<li><a href="#работа-со-сделками">Работа со сделками</a></li>
+<li><a href="#создание-сделки">Создание сделки</a></li>
+<li><a href="#получение-информации-о-сделке">Получение информации о сделке</a></li>
+<li><a href="#работа-с-профилями">Работа с профилями</a></li>
+<li><a href="#получение-информации-о-профиле">Получение информации о профиле</a></li>
+<li><a href="#работа-с-устройствами">Работа с устройствами</a></li>
+<li><a href="#получение-информации-об-устройстве">Получение информации об устройстве</a></li>
+<li><a href="#обработка-ошибок">Обработка ошибок</a></li>
+<li><a href="#рекомендации-по-безопасности">Рекомендации по безопасности</a></li>
+<li><a href="#примеры-на-различных-языках">Примеры на различных языках</a></li>
+</ul>
+<h2>Введение</h2>
+<p>FinoraPay API представляет собой комплексный интерфейс для взаимодействия с платформой одноранговых финансовых операций (P2P). API построен на архитектуре REST и использует стандартные HTTP-методы для выполнения операций над ресурсами. Взаимодействие с API осуществляется через защищенное соединение HTTPS, что гарантирует безопасность передаваемых данных.</p>
+<p>Данная документация содержит подробное описание всех доступных эндпоинтов, методов, параметров и формата ответов, необходимых для интеграции с платформой FinoraPay. Примеры запросов и ответов включены для каждого метода API, что позволяет быстрее понять принципы работы с платформой.</p>
+<h2>Структура API</h2>
+<p>API-интерфейс FinoraPay организован вокруг нескольких основных ресурсов:</p>
+<ul>
+<li><strong>Пользователи</strong>: управление пользовательскими аккаунтами, аутентификация, обновление токенов.</li>
+<li><strong>Сделки</strong>: создание, просмотр и управление транзакциями между пользователями.</li>
+<li><strong>Профили</strong>: управление профилями пользователей, которые могут содержать различные настройки и параметры.</li>
+<li><strong>Устройства</strong>: регистрация и управление устройствами, используемыми для доступа к платформе.</li>
+<li><strong>Реквизиты</strong>: управление платежными реквизитами пользователей.</li>
+</ul>
+<p>Базовый URL для всех запросов: <code>https://our-domain/api/v1/</code></p>
+<h2>Аутентификация</h2>
+<h3>Общее описание</h3>
+<p>Аутентификация пользователя в системе осуществляется через передачу логина и пароля. После успешной аутентификации система возвращает два токена: <strong>access</strong> и <strong>refresh</strong>. Access-токен используется для доступа к защищенным ресурсам, а refresh-токен — для обновления access-токена после истечения его срока действия.</p>
+<h3>Запрос на аутентификацию</h3>
+<p><strong>Адрес</strong>: <code>/login</code><br />
+<strong>Метод</strong>: <code>POST</code></p>
+<h4>Параметры</h4>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Описание</th>
+<th>Пример</th>
+<th>Обязательность</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>login</td>
+<td>Логин пользователя</td>
+<td>testlogin</td>
+<td>+</td>
+</tr>
+<tr>
+<td>password</td>
+<td>Пароль пользователя</td>
+<td>testpassword</td>
+<td>+</td>
+</tr>
+</tbody>
+</table>
+<h4>Пример запроса</h4>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">&#39;POST&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">&#39;https://our-domain/api/v1/users/login/&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;accept: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;X-CSRFTOKEN: dgXEcKgjRPefwJYM6VyeDlykSGPlEGyefNbzMKgdplBzl4dUcJqK89lhuqDzYUYj&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">  &quot;login&quot;: &quot;test2&quot;,</span>
+<span class="s1">  &quot;password&quot;: &quot;test2&quot;</span>
+<span class="s1">}&#39;</span>
+</code></pre></div>
+
+<h4>Пример ответа</h4>
+<p><strong>Успешная аутентификация (код 200)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;refresh&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MDY3OTIzNiwiaWF0IjoxNzQwMDc0NDM2LCJqdGkiOiIwYzIwMjhmNjA1NWM0MWU0YTA3OTBmOGRiMDA2YTYyMyIsInVzZXJfaWQiOjEsImxvZ2luIjoidGVzdDIiLCJuYW1lIjoidGVzdDIifQ.ueUEdWrXg5-2JoEtZPCmKqaINWyQWCASF1EUJ7SA9Xg&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;access&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwMDgxNjM2LCJpYXQiOjE3NDAwNzQ0MzYsImp0aSI6IjM1MTc0MjMyNmYxNTRmOGE4ZmMxYzAwMDMyN2MyMzRiIiwidXNlcl9pZCI6MSwibG9naW4iOiJ0ZXN0MiIsIm5hbWUiOiJ0ZXN0MiJ9.Lx-LiZn0otIe3yadckybWS5B6fgpk05i64LvHeQLpR8&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Ошибка аутентификации (код 401)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;No active account found with the given credentials&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3>Дополнительные замечания</h3>
+<ul>
+<li><strong>CSRF-токен</strong>: В запросе передается заголовок X-CSRFTOKEN, который используется для защиты от CSRF-атак. Убедитесь, что токен актуален.</li>
+<li><strong>Формат данных</strong>: Запрос и ответ передаются в формате JSON.</li>
+<li><strong>Срок действия токенов</strong>:</li>
+<li>Access-токен имеет ограниченный срок действия (обычно несколько часов).</li>
+<li>Refresh-токен используется для получения нового access-токена после истечения срока действия текущего.</li>
+<li><strong>Обработка ошибок</strong>: В случае ошибки 401 проверьте корректность введенных логина и пароля. Если проблема сохраняется, обратитесь в техническую поддержку.</li>
+</ul>
+<h3>Рекомендации по использованию</h3>
+<ul>
+<li><strong>Хранение токенов</strong>: Access-токен следует хранить в защищенном месте (например, в памяти приложения или в зашифрованном хранилище). Не передавайте его в открытом виде.</li>
+<li><strong>Обновление токенов</strong>: Используйте refresh-токен для получения нового access-токена, когда текущий истекает.</li>
+<li><strong>Защита от CSRF</strong>: Убедитесь, что CSRF-токен передается в каждом запросе, где это требуется.</li>
+</ul>
+<h3>Пример использования access-токена</h3>
+<p>После успешной аутентификации используйте access-токен для доступа к защищенным ресурсам:</p>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">&#39;https://our-domain/api/v1/protected-resource/&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;accept: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&#39;</span>
+</code></pre></div>
+
+<h2>Работа со сделками</h2>
+<h3>Создание сделки</h3>
+<p><strong>Адрес</strong>: <code>fiats/deals</code><br />
+<strong>Метод</strong>: <code>POST</code></p>
+<h4>Параметры</h4>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Описание</th>
+<th>Пример</th>
+<th>Обязательность</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bank</td>
+<td>ID банка</td>
+<td>1</td>
+<td>+</td>
+</tr>
+<tr>
+<td>requisite</td>
+<td>ID реквизитов</td>
+<td>2</td>
+<td>+</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>Сумма сделки в руб.</td>
+<td>1000</td>
+<td>+</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Примечание:</strong> Если значение параметра <code>bank</code> установлено в <code>SPD</code>, то сделка будет создана с использованием Системы Быстрых Платежей (СБП).</p>
+</blockquote>
+<h4>Пример запроса</h4>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">&#39;POST&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">&#39;https://our-domain/api/v1/fiats/deals/&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;accept: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;X-CSRFTOKEN: dgXEcKgjRPefwJYM6VyeDlykSGPlEGyefNbzMKgdplBzl4dUcJqK89lhuqDzYUYj&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">  &quot;bank&quot;: 1,</span>
+<span class="s1">  &quot;requisite&quot;: 0,</span>
+<span class="s1">  &quot;amount&quot;: &quot;478566&quot;</span>
+<span class="s1">}&#39;</span>
+</code></pre></div>
+
+<h4>Пример ответа</h4>
+<p><strong>Успешное создание сделки (код 200)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;bank&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;requisite&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;amount&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;8036927&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;open&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;created_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-02-20T18:28:47.903Z&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;updated_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-02-20T18:28:47.903Z&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;user&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>ID сделки</td>
+</tr>
+<tr>
+<td>bank</td>
+<td>ID банка</td>
+</tr>
+<tr>
+<td>requisite</td>
+<td>ID реквизитов</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>Сумма сделки в руб.</td>
+</tr>
+<tr>
+<td>status</td>
+<td>Статус сделки</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>Дата создания</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>Дата обновления</td>
+</tr>
+<tr>
+<td>user</td>
+<td>ID пользователя</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ошибка авторизации (код 401)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Authentication credentials were not provided.&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Ошибка валидации данных (код 400)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Invalid input data. Please check the provided parameters.&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4>Дополнительные замечания</h4>
+<ul>
+<li><strong>CSRF-токен</strong>: В запросе передается заголовок X-CSRFTOKEN, который используется для защиты от CSRF-атак. Убедитесь, что токен актуален.</li>
+<li><strong>Формат данных</strong>: Запрос и ответ передаются в формате JSON.</li>
+<li><strong>Проверка данных</strong>: Убедитесь, что передаваемые данные (ID банка, реквизитов и сумма) корректны и существуют в системе.</li>
+<li><strong>Обработка ошибок</strong>: В случае ошибки 401 проверьте авторизацию. Если проблема сохраняется, обратитесь в техническую поддержку.</li>
+</ul>
+<h4>Рекомендации по использованию</h4>
+<ul>
+<li><strong>Проверка данных</strong>: Перед созданием сделки убедитесь, что все переданные данные (ID банка, реквизитов) существуют и корректны.</li>
+<li><strong>Обработка статусов</strong>: После создания сделки отслеживайте её статус (например, created, pending, completed).</li>
+<li><strong>Защита от CSRF</strong>: Убедитесь, что CSRF-токен передается в каждом запросе, где это требуется.</li>
+</ul>
+<h3>Получение информации о сделке</h3>
+<p><strong>Адрес</strong>: <code>fiats/deals/{id}/</code><br />
+<strong>Метод</strong>: <code>GET</code></p>
+<h4>Параметры</h4>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Описание</th>
+<th>Пример</th>
+<th>Обязательность</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>ID сделки</td>
+<td>123</td>
+<td>+</td>
+</tr>
+</tbody>
+</table>
+<h4>Пример запроса</h4>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">&#39;https://our-domain/api/v1/fiats/deals/1/&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;accept: application/json&#39;</span>
+</code></pre></div>
+
+<h4>Пример ответа</h4>
+<p><strong>Успешный ответ (код 200)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;partial&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;wedge&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;predicted&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;amount&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;30022&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;created_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-02-20T10:14:25.5ME&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;updated_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-02-20T10:14:25.5ME&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;use&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Уникальный идентификатор сделки</td>
+</tr>
+<tr>
+<td>partial</td>
+<td>Частичная сумма (если применимо)</td>
+</tr>
+<tr>
+<td>wedge</td>
+<td>Дополнительные данные (если применимо)</td>
+</tr>
+<tr>
+<td>predicted</td>
+<td>Прогнозируемые данные (если применимо)</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>Сумма сделки</td>
+</tr>
+<tr>
+<td>status</td>
+<td>Текущий статус сделки</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>Время создания сделки</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>Время последнего обновления сделки</td>
+</tr>
+<tr>
+<td>use</td>
+<td>Дополнительные данные (если применимо)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ошибка авторизации (код 401)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Authentication credentials were not provided.&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Ошибка "Сделка не найдена" (код 404)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Deal not found.&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2>Работа с профилями</h2>
+<h3>Получение информации о профиле</h3>
+<p><strong>Адрес</strong>: <code>fiats/profiles/{id}/</code><br />
+<strong>Метод</strong>: <code>GET</code></p>
+<h4>Параметры</h4>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Описание</th>
+<th>Пример</th>
+<th>Обязательность</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>ID профиля</td>
+<td>123</td>
+<td>+</td>
+</tr>
+</tbody>
+</table>
+<h4>Пример запроса</h4>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">&#39;https://our-domain/api/v1/fiats/profiles/12345/&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;accept: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;access_token&gt;&#39;</span>
+</code></pre></div>
+
+<h4>Пример ответа</h4>
+<p><strong>Успешный ответ (код 200)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;device&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;closed_detail_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;fio&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;new&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;bank&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Уникальный идентификатор профиля</td>
+</tr>
+<tr>
+<td>device</td>
+<td>Идентификатор устройства, связанного с профилем</td>
+</tr>
+<tr>
+<td>closed_detail_count</td>
+<td>Количество закрытых деталей (если применимо)</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Название профиля</td>
+</tr>
+<tr>
+<td>fio</td>
+<td>ФИО пользователя, связанного с профилем</td>
+</tr>
+<tr>
+<td>new</td>
+<td>Флаг, указывающий на новый профиль (например, 0 — старый, 1 — новый)</td>
+</tr>
+<tr>
+<td>bank</td>
+<td>Идентификатор банка, связанного с профилем</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ошибка авторизации (код 401)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Authentication credentials were not provided.&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Ошибка "Профиль не найден" (код 404)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Profile not found.&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2>Работа с устройствами</h2>
+<h3>Получение информации об устройстве</h3>
+<p><strong>Адрес</strong>: <code>fiats/devices/{id}/</code><br />
+<strong>Метод</strong>: <code>GET</code></p>
+<h4>Параметры</h4>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Описание</th>
+<th>Пример</th>
+<th>Обязательность</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>ID устройства</td>
+<td>123</td>
+<td>+</td>
+</tr>
+</tbody>
+</table>
+<h4>Пример запроса</h4>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">&#39;https://our-domain/api/v1/fiats/devices/12345/&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;accept: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;access_token&gt;&#39;</span>
+</code></pre></div>
+
+<h4>Пример ответа</h4>
+<p><strong>Успешный ответ (код 200)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;requisite&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;profile&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;power&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;connection&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;ring&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;user&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Уникальный идентификатор устройства</td>
+</tr>
+<tr>
+<td>requisite</td>
+<td>Идентификатор реквизитов, связанных с устройством</td>
+</tr>
+<tr>
+<td>profile</td>
+<td>Идентификатор профиля, связанного с устройством</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Название устройства</td>
+</tr>
+<tr>
+<td>power</td>
+<td>Информация о мощности устройства</td>
+</tr>
+<tr>
+<td>connection</td>
+<td>Тип подключения устройства</td>
+</tr>
+<tr>
+<td>ring</td>
+<td>Информация о кольце (если применимо)</td>
+</tr>
+<tr>
+<td>status</td>
+<td>Текущий статус устройства (например, true — активно, false — неактивно)</td>
+</tr>
+<tr>
+<td>user</td>
+<td>Идентификатор пользователя, связанного с устройством</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ошибка авторизации (код 401)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Authentication credentials were not provided.&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Ошибка "Устройство не найдено" (код 404)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Device not found.&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2>Обработка ошибок</h2>
+<p>API FinoraPay возвращает стандартные HTTP-коды состояния для индикации успеха или неудачи запроса. Ниже приведены основные коды состояния и их значения:</p>
+<table>
+<thead>
+<tr>
+<th>Код состояния</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200 OK</td>
+<td>Запрос выполнен успешно</td>
+</tr>
+<tr>
+<td>400 Bad Request</td>
+<td>Некорректные параметры запроса</td>
+</tr>
+<tr>
+<td>401 Unauthorized</td>
+<td>Отсутствуют или недействительны учетные данные для аутентификации</td>
+</tr>
+<tr>
+<td>404 Not Found</td>
+<td>Запрашиваемый ресурс не найден</td>
+</tr>
+<tr>
+<td>500 Internal Server Error</td>
+<td>Внутренняя ошибка сервера</td>
+</tr>
+</tbody>
+</table>
+<p>В случае ошибки API возвращает JSON-объект с детальным описанием проблемы:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Описание ошибки&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2>Рекомендации по безопасности</h2>
+<p>При работе с API FinoraPay необходимо соблюдать следующие рекомендации по безопасности:</p>
+<ol>
+<li>
+<p><strong>Защита токенов</strong>: Храните access и refresh токены в защищенном месте. Не передавайте их в открытом виде через незащищенные каналы связи.</p>
+</li>
+<li>
+<p><strong>Обновление токенов</strong>: Регулярно обновляйте access-токен с помощью refresh-токена для минимизации рисков несанкционированного доступа.</p>
+</li>
+<li>
+<p><strong>CSRF-защита</strong>: Используйте CSRF-токены при отправке POST, PUT и DELETE запросов для защиты от Cross-Site Request Forgery атак.</p>
+</li>
+<li>
+<p><strong>HTTPS</strong>: Всегда используйте HTTPS для взаимодействия с API для обеспечения шифрования передаваемых данных.</p>
+</li>
+<li>
+<p><strong>Минимизация данных</strong>: Запрашивайте и передавайте только необходимые данные, избегая излишнего раскрытия информации.</p>
+</li>
+</ol>
+<h2>Примеры на различных языках</h2>
+<p>Ниже приведены примеры использования API FinoraPay на различных языках программирования.</p>
+<h3>PHP</h3>
+<h4>Пример аутентификации</h4>
+<div class="codehilite"><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="c1">// Аутентификация и получение токенов доступа</span>
+<span class="k">function</span> <span class="nf">authenticate</span><span class="p">(</span><span class="nv">$login</span><span class="p">,</span> <span class="nv">$password</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$url</span> <span class="o">=</span> <span class="s1">&#39;https://our-domain/api/v1/users/login/&#39;</span><span class="p">;</span>
+
+    <span class="nv">$headers</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;accept: application/json&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Content-Type: application/json&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;X-CSRFTOKEN: dgXEcKgjRPefwJYM6VyeDlykSGPlEGyefNbzMKgdplBzl4dUcJqK89lhuqDzYUYj&#39;</span>
+    <span class="p">];</span>
+
+    <span class="nv">$data</span> <span class="o">=</span> <span class="nb">json_encode</span><span class="p">([</span>
+        <span class="s1">&#39;login&#39;</span> <span class="o">=&gt;</span> <span class="nv">$login</span><span class="p">,</span>
+        <span class="s1">&#39;password&#39;</span> <span class="o">=&gt;</span> <span class="nv">$password</span>
+    <span class="p">]);</span>
+
+    <span class="nv">$ch</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_POST</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_POSTFIELDS</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="nv">$headers</span><span class="p">);</span>
+
+    <span class="nv">$response</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+    <span class="nv">$httpCode</span> <span class="o">=</span> <span class="nb">curl_getinfo</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLINFO_HTTP_CODE</span><span class="p">);</span>
+    <span class="nb">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$httpCode</span> <span class="o">===</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nv">$response</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nv">$error</span> <span class="o">=</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nv">$response</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">Exception</span><span class="p">(</span><span class="nv">$error</span><span class="p">[</span><span class="s1">&#39;detail&#39;</span><span class="p">]</span> <span class="o">??</span> <span class="s1">&#39;Ошибка аутентификации&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Пример использования</span>
+<span class="k">try</span> <span class="p">{</span>
+    <span class="nv">$tokens</span> <span class="o">=</span> <span class="nx">authenticate</span><span class="p">(</span><span class="s1">&#39;test2&#39;</span><span class="p">,</span> <span class="s1">&#39;test2&#39;</span><span class="p">);</span>
+    <span class="nv">$accessToken</span> <span class="o">=</span> <span class="nv">$tokens</span><span class="p">[</span><span class="s1">&#39;access&#39;</span><span class="p">];</span>
+    <span class="nv">$refreshToken</span> <span class="o">=</span> <span class="nv">$tokens</span><span class="p">[</span><span class="s1">&#39;refresh&#39;</span><span class="p">];</span>
+
+    <span class="k">echo</span> <span class="s2">&quot;Access Token: &quot;</span> <span class="o">.</span> <span class="nv">$accessToken</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+    <span class="k">echo</span> <span class="s2">&quot;Refresh Token: &quot;</span> <span class="o">.</span> <span class="nv">$refreshToken</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">Exception</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">&quot;Ошибка: &quot;</span> <span class="o">.</span> <span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">()</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre></div>
+
+<h4>Пример создания сделки</h4>
+<div class="codehilite"><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="k">function</span> <span class="nf">createDeal</span><span class="p">(</span><span class="nv">$accessToken</span><span class="p">,</span> <span class="nv">$bankId</span><span class="p">,</span> <span class="nv">$requisiteId</span><span class="p">,</span> <span class="nv">$amount</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$url</span> <span class="o">=</span> <span class="s1">&#39;https://our-domain/api/v1/fiats/deals/&#39;</span><span class="p">;</span>
+
+    <span class="nv">$headers</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;accept: application/json&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Content-Type: application/json&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;X-CSRFTOKEN: dgXEcKgjRPefwJYM6VyeDlykSGPlEGyefNbzMKgdplBzl4dUcJqK89lhuqDzYUYj&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Authorization: Bearer &#39;</span> <span class="o">.</span> <span class="nv">$accessToken</span>
+    <span class="p">];</span>
+
+    <span class="nv">$data</span> <span class="o">=</span> <span class="nb">json_encode</span><span class="p">([</span>
+        <span class="s1">&#39;bank&#39;</span> <span class="o">=&gt;</span> <span class="nv">$bankId</span><span class="p">,</span>
+        <span class="s1">&#39;requisite&#39;</span> <span class="o">=&gt;</span> <span class="nv">$requisiteId</span><span class="p">,</span>
+        <span class="s1">&#39;amount&#39;</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">string</span><span class="p">)</span> <span class="nv">$amount</span>
+    <span class="p">]);</span>
+
+    <span class="nv">$ch</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_POST</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_POSTFIELDS</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="nv">$headers</span><span class="p">);</span>
+
+    <span class="nv">$response</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+    <span class="nv">$httpCode</span> <span class="o">=</span> <span class="nb">curl_getinfo</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLINFO_HTTP_CODE</span><span class="p">);</span>
+    <span class="nb">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$httpCode</span> <span class="o">===</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nv">$response</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nv">$error</span> <span class="o">=</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nv">$response</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">Exception</span><span class="p">(</span><span class="nv">$error</span><span class="p">[</span><span class="s1">&#39;detail&#39;</span><span class="p">]</span> <span class="o">??</span> <span class="s1">&#39;Ошибка создания сделки&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre></div>
+
+<h3>Node.js</h3>
+<h4>Пример аутентификации</h4>
+<div class="codehilite"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;axios&#39;</span><span class="p">);</span>
+
+<span class="c1">// Аутентификация и получение токенов доступа</span>
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">authenticate</span><span class="p">(</span><span class="nx">login</span><span class="p">,</span><span class="w"> </span><span class="nx">password</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;https://our-domain/api/v1/users/login/&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">login</span><span class="o">:</span><span class="w"> </span><span class="nx">login</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">password</span><span class="o">:</span><span class="w"> </span><span class="nx">password</span>
+<span class="w">        </span><span class="p">},</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s1">&#39;accept&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+<span class="w">                </span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+<span class="w">                </span><span class="s1">&#39;X-CSRFTOKEN&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;dgXEcKgjRPefwJYM6VyeDlykSGPlEGyefNbzMKgdplBzl4dUcJqK89lhuqDzYUYj&#39;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">});</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">detail</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;Ошибка аутентификации&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="nx">error</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Пример использования</span>
+<span class="p">(</span><span class="k">async</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">tokens</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">authenticate</span><span class="p">(</span><span class="s1">&#39;test2&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;test2&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Access Token:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">tokens</span><span class="p">.</span><span class="nx">access</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Refresh Token:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">tokens</span><span class="p">.</span><span class="nx">refresh</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Ошибка:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">})();</span>
+</code></pre></div>
+
+<h4>Пример создания сделки</h4>
+<div class="codehilite"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;axios&#39;</span><span class="p">);</span>
+
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">createDeal</span><span class="p">(</span><span class="nx">accessToken</span><span class="p">,</span><span class="w"> </span><span class="nx">bankId</span><span class="p">,</span><span class="w"> </span><span class="nx">requisiteId</span><span class="p">,</span><span class="w"> </span><span class="nx">amount</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;https://our-domain/api/v1/fiats/deals/&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">bank</span><span class="o">:</span><span class="w"> </span><span class="nx">bankId</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">requisite</span><span class="o">:</span><span class="w"> </span><span class="nx">requisiteId</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">amount</span><span class="o">:</span><span class="w"> </span><span class="nb">String</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span>
+<span class="w">        </span><span class="p">},</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s1">&#39;accept&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+<span class="w">                </span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+<span class="w">                </span><span class="s1">&#39;X-CSRFTOKEN&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;dgXEcKgjRPefwJYM6VyeDlykSGPlEGyefNbzMKgdplBzl4dUcJqK89lhuqDzYUYj&#39;</span><span class="p">,</span>
+<span class="w">                </span><span class="s1">&#39;Authorization&#39;</span><span class="o">:</span><span class="w"> </span><span class="sb">`Bearer </span><span class="si">${</span><span class="nx">accessToken</span><span class="si">}</span><span class="sb">`</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">});</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">detail</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;Ошибка создания сделки&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="nx">error</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3>Golang</h3>
+<h4>Пример аутентификации</h4>
+<div class="codehilite"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;bytes&quot;</span>
+<span class="w">    </span><span class="s">&quot;encoding/json&quot;</span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">    </span><span class="s">&quot;io/ioutil&quot;</span>
+<span class="w">    </span><span class="s">&quot;net/http&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">AuthRequest</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Login</span><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;login&quot;`</span>
+<span class="w">    </span><span class="nx">Password</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;password&quot;`</span>
+<span class="p">}</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">AuthResponse</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Access</span><span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;access&quot;`</span>
+<span class="w">    </span><span class="nx">Refresh</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;refresh&quot;`</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">authenticate</span><span class="p">(</span><span class="nx">login</span><span class="p">,</span><span class="w"> </span><span class="nx">password</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">AuthResponse</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">reqBody</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">AuthRequest</span><span class="p">{</span>
+<span class="w">        </span><span class="nx">Login</span><span class="p">:</span><span class="w">    </span><span class="nx">login</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Password</span><span class="p">:</span><span class="w"> </span><span class="nx">password</span><span class="p">,</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">reqJSON</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">reqBody</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">NewRequest</span><span class="p">(</span><span class="s">&quot;POST&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;https://our-domain/api/v1/users/login/&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">bytes</span><span class="p">.</span><span class="nx">NewBuffer</span><span class="p">(</span><span class="nx">reqJSON</span><span class="p">))</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">req</span><span class="p">.</span><span class="nx">Header</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="s">&quot;accept&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">req</span><span class="p">.</span><span class="nx">Header</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="s">&quot;Content-Type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">req</span><span class="p">.</span><span class="nx">Header</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="s">&quot;X-CSRFTOKEN&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dgXEcKgjRPefwJYM6VyeDlykSGPlEGyefNbzMKgdplBzl4dUcJqK89lhuqDzYUYj&quot;</span><span class="p">)</span>
+
+<span class="w">    </span><span class="nx">client</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{}</span>
+<span class="w">    </span><span class="nx">resp</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">client</span><span class="p">.</span><span class="nx">Do</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+
+<span class="w">    </span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ioutil</span><span class="p">.</span><span class="nx">ReadAll</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">resp</span><span class="p">.</span><span class="nx">StatusCode</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;Ошибка аутентификации: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">string</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">authResp</span><span class="w"> </span><span class="nx">AuthResponse</span>
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">authResp</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">authResp</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">auth</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">authenticate</span><span class="p">(</span><span class="s">&quot;test2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;test2&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Ошибка: %v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Access Token: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">auth</span><span class="p">.</span><span class="nx">Access</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Refresh Token: %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">auth</span><span class="p">.</span><span class="nx">Refresh</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3>Python</h3>
+<h4>Пример аутентификации</h4>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="n">login</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://our-domain/api/v1/users/login/&#39;</span>
+
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;X-CSRFTOKEN&#39;</span><span class="p">:</span> <span class="s1">&#39;dgXEcKgjRPefwJYM6VyeDlykSGPlEGyefNbzMKgdplBzl4dUcJqK89lhuqDzYUYj&#39;</span>
+    <span class="p">}</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;login&#39;</span><span class="p">:</span> <span class="n">login</span><span class="p">,</span>
+        <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="n">password</span>
+    <span class="p">}</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;detail&#39;</span><span class="p">,</span> <span class="s1">&#39;Ошибка аутентификации&#39;</span><span class="p">))</span>
+
+<span class="c1"># Пример использования</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">(</span><span class="s1">&#39;test2&#39;</span><span class="p">,</span> <span class="s1">&#39;test2&#39;</span><span class="p">)</span>
+    <span class="n">access_token</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="s1">&#39;access&#39;</span><span class="p">]</span>
+    <span class="n">refresh_token</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="s1">&#39;refresh&#39;</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Access Token: </span><span class="si">{</span><span class="n">access_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Refresh Token: </span><span class="si">{</span><span class="n">refresh_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ошибка: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h4>Пример создания сделки</h4>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_deal</span><span class="p">(</span><span class="n">access_token</span><span class="p">,</span> <span class="n">bank_id</span><span class="p">,</span> <span class="n">requisite_id</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://our-domain/api/v1/fiats/deals/&#39;</span>
+
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;X-CSRFTOKEN&#39;</span><span class="p">:</span> <span class="s1">&#39;dgXEcKgjRPefwJYM6VyeDlykSGPlEGyefNbzMKgdplBzl4dUcJqK89lhuqDzYUYj&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Bearer </span><span class="si">{</span><span class="n">access_token</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="p">}</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;bank&#39;</span><span class="p">:</span> <span class="n">bank_id</span><span class="p">,</span>
+        <span class="s1">&#39;requisite&#39;</span><span class="p">:</span> <span class="n">requisite_id</span><span class="p">,</span>
+        <span class="s1">&#39;amount&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;detail&#39;</span><span class="p">,</span> <span class="s1">&#39;Ошибка создания сделки&#39;</span><span class="p">))</span>
+</code></pre></div>
+
+<hr />
+<p>© 2025 FinoraPay. Все права защищены.</p>
+</body>
+</html>
