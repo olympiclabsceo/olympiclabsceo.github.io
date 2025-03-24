@@ -176,8 +176,7 @@
 </head>
 <body>
     <h1 id="api-finorapay">Документация API платформы FinoraPay</h1>
-<p><img alt="FinoraPay Logo" src="https://finorapay.io/img/logo_white.svg" style="background: black; width: 300px; height: 100px;" /></p>
-<style>
+    <p><img alt="FinoraPay Logo" src="https://finorapay.io/img/logo_white.svg" style="background: black; width: 300px; height: 100px;" /></p>
 body {
   background-color: #f8f9fa;
 }
@@ -342,7 +341,11 @@ code {
 </tbody>
 </table>
 <blockquote>
-<p><strong>Примечание:</strong> Если значение параметра <code>bank</code> установлено в <code>SPD</code>, то сделка будет создана с использованием Системы Быстрых Платежей (СБП).</p>
+<p><strong>Примечание:</strong> Если значение параметра <code>bank</code> установлено в <code>SPD</code>, то сделка будет создана с использованием Системы Быстрых Платежей (СБП). 
+Сделки могут проводиться через различные платежные методы:
+- <strong>СБП</strong> — для быстрых переводов между физическими лицами (значение <code>bank</code>: SPD)
+- <strong>Банковская карта</strong> — для стандартных карточных переводов (значение <code>bank</code>: соответствующий ID банка)
+- <strong>Расчетный счет</strong> — для переводов между юридическими лицами (значение <code>bank</code>: соответствующий ID расчетного счета)</p>
 </blockquote>
 <h4 id="_14">Пример запроса</h4>
 <div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">&#39;POST&#39;</span><span class="w"> </span><span class="se">\</span>
