@@ -20,6 +20,7 @@
             margin-top: 24px;
             margin-bottom: 16px;
             font-weight: 600;
+            scroll-margin-top: 30px; /* Отступ при прокрутке к якорю */
         }
         h1 {
             font-size: 32px;
@@ -93,10 +94,88 @@
             padding: 10px;
             margin: 20px 0;
         }
+        /* Стили для содержания */
+        #содержание {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        #содержание ul {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+        #содержание ul ul {
+            padding-left: 20px;
+        }
+        /* Фиксированная кнопка "Наверх" */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #5e35b1;
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            display: none;
+            z-index: 1000;
+        }
+        .back-to-top:hover {
+            opacity: 1;
+        }
     </style>
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Обработка кликов по ссылкам внутри страницы
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 20,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Обновляем URL без перезагрузки страницы
+                    history.pushState(null, null, `#${targetId}`);
+                }
+            });
+        });
+    });
+</script>
+
+    <script>
+        // Скрипт для кнопки "Наверх"
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                document.getElementById("backToTop").style.display = "block";
+            } else {
+                document.getElementById("backToTop").style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
 </head>
 <body>
-    <h1>Документация API платформы FinoraPay</h1>
+    <h1 id="api-finorapay">Документация API платформы FinoraPay</h1>
 <p><img alt="FinoraPay Logo" src="https://finorapay.io/logo.png" /></p>
 <style>
 body {
@@ -118,11 +197,11 @@ code {
 }
 </style>
 
-<h2>Содержание</h2>
+<h2 id="_1">Содержание</h2>
 <ul>
-<li><a href="#введение">Введение</a></li>
+<li><a href="#vvedenie">Введение</a></li>
 <li><a href="#структура-api">Структура API</a></li>
-<li><a href="#аутентификация">Аутентификация</a></li>
+<li><a href="#autentifikatsiya">Аутентификация</a></li>
 <li><a href="#работа-со-сделками">Работа со сделками</a></li>
 <li><a href="#создание-сделки">Создание сделки</a></li>
 <li><a href="#получение-информации-о-сделке">Получение информации о сделке</a></li>
@@ -134,10 +213,10 @@ code {
 <li><a href="#рекомендации-по-безопасности">Рекомендации по безопасности</a></li>
 <li><a href="#примеры-на-различных-языках">Примеры на различных языках</a></li>
 </ul>
-<h2>Введение</h2>
+<h2 id="_2">Введение</h2>
 <p>FinoraPay API представляет собой комплексный интерфейс для взаимодействия с платформой одноранговых финансовых операций (P2P). API построен на архитектуре REST и использует стандартные HTTP-методы для выполнения операций над ресурсами. Взаимодействие с API осуществляется через защищенное соединение HTTPS, что гарантирует безопасность передаваемых данных.</p>
 <p>Данная документация содержит подробное описание всех доступных эндпоинтов, методов, параметров и формата ответов, необходимых для интеграции с платформой FinoraPay. Примеры запросов и ответов включены для каждого метода API, что позволяет быстрее понять принципы работы с платформой.</p>
-<h2>Структура API</h2>
+<h2 id="api">Структура API</h2>
 <p>API-интерфейс FinoraPay организован вокруг нескольких основных ресурсов:</p>
 <ul>
 <li><strong>Пользователи</strong>: управление пользовательскими аккаунтами, аутентификация, обновление токенов.</li>
@@ -147,13 +226,13 @@ code {
 <li><strong>Реквизиты</strong>: управление платежными реквизитами пользователей.</li>
 </ul>
 <p>Базовый URL для всех запросов: <code>https://our-domain/api/v1/</code></p>
-<h2>Аутентификация</h2>
-<h3>Общее описание</h3>
+<h2 id="_3">Аутентификация</h2>
+<h3 id="_4">Общее описание</h3>
 <p>Аутентификация пользователя в системе осуществляется через передачу логина и пароля. После успешной аутентификации система возвращает два токена: <strong>access</strong> и <strong>refresh</strong>. Access-токен используется для доступа к защищенным ресурсам, а refresh-токен — для обновления access-токена после истечения его срока действия.</p>
-<h3>Запрос на аутентификацию</h3>
+<h3 id="_5">Запрос на аутентификацию</h3>
 <p><strong>Адрес</strong>: <code>/login</code><br />
 <strong>Метод</strong>: <code>POST</code></p>
-<h4>Параметры</h4>
+<h4 id="_6">Параметры</h4>
 <table>
 <thead>
 <tr>
@@ -178,7 +257,7 @@ code {
 </tr>
 </tbody>
 </table>
-<h4>Пример запроса</h4>
+<h4 id="_7">Пример запроса</h4>
 <div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">&#39;POST&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="s1">&#39;https://our-domain/api/v1/users/login/&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;accept: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
@@ -190,7 +269,7 @@ code {
 <span class="s1">}&#39;</span>
 </code></pre></div>
 
-<h4>Пример ответа</h4>
+<h4 id="_8">Пример ответа</h4>
 <p><strong>Успешная аутентификация (код 200)</strong>:</p>
 <div class="codehilite"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;refresh&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MDY3OTIzNiwiaWF0IjoxNzQwMDc0NDM2LCJqdGkiOiIwYzIwMjhmNjA1NWM0MWU0YTA3OTBmOGRiMDA2YTYyMyIsInVzZXJfaWQiOjEsImxvZ2luIjoidGVzdDIiLCJuYW1lIjoidGVzdDIifQ.ueUEdWrXg5-2JoEtZPCmKqaINWyQWCASF1EUJ7SA9Xg&quot;</span><span class="p">,</span>
@@ -204,7 +283,7 @@ code {
 <span class="p">}</span>
 </code></pre></div>
 
-<h3>Дополнительные замечания</h3>
+<h3 id="_9">Дополнительные замечания</h3>
 <ul>
 <li><strong>CSRF-токен</strong>: В запросе передается заголовок X-CSRFTOKEN, который используется для защиты от CSRF-атак. Убедитесь, что токен актуален.</li>
 <li><strong>Формат данных</strong>: Запрос и ответ передаются в формате JSON.</li>
@@ -213,13 +292,13 @@ code {
 <li>Refresh-токен используется для получения нового access-токена после истечения срока действия текущего.</li>
 <li><strong>Обработка ошибок</strong>: В случае ошибки 401 проверьте корректность введенных логина и пароля. Если проблема сохраняется, обратитесь в техническую поддержку.</li>
 </ul>
-<h3>Рекомендации по использованию</h3>
+<h3 id="_10">Рекомендации по использованию</h3>
 <ul>
 <li><strong>Хранение токенов</strong>: Access-токен следует хранить в защищенном месте (например, в памяти приложения или в зашифрованном хранилище). Не передавайте его в открытом виде.</li>
 <li><strong>Обновление токенов</strong>: Используйте refresh-токен для получения нового access-токена, когда текущий истекает.</li>
 <li><strong>Защита от CSRF</strong>: Убедитесь, что CSRF-токен передается в каждом запросе, где это требуется.</li>
 </ul>
-<h3>Пример использования access-токена</h3>
+<h3 id="access-">Пример использования access-токена</h3>
 <p>После успешной аутентификации используйте access-токен для доступа к защищенным ресурсам:</p>
 <div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="s1">&#39;https://our-domain/api/v1/protected-resource/&#39;</span><span class="w"> </span><span class="se">\</span>
@@ -227,11 +306,11 @@ code {
 <span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&#39;</span>
 </code></pre></div>
 
-<h2>Работа со сделками</h2>
-<h3>Создание сделки</h3>
+<h2 id="_11">Работа со сделками</h2>
+<h3 id="_12">Создание сделки</h3>
 <p><strong>Адрес</strong>: <code>fiats/deals</code><br />
 <strong>Метод</strong>: <code>POST</code></p>
-<h4>Параметры</h4>
+<h4 id="_13">Параметры</h4>
 <table>
 <thead>
 <tr>
@@ -265,7 +344,7 @@ code {
 <blockquote>
 <p><strong>Примечание:</strong> Если значение параметра <code>bank</code> установлено в <code>SPD</code>, то сделка будет создана с использованием Системы Быстрых Платежей (СБП).</p>
 </blockquote>
-<h4>Пример запроса</h4>
+<h4 id="_14">Пример запроса</h4>
 <div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">&#39;POST&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="s1">&#39;https://our-domain/api/v1/fiats/deals/&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;accept: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
@@ -278,7 +357,7 @@ code {
 <span class="s1">}&#39;</span>
 </code></pre></div>
 
-<h4>Пример ответа</h4>
+<h4 id="_15">Пример ответа</h4>
 <p><strong>Успешное создание сделки (код 200)</strong>:</p>
 <div class="codehilite"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
@@ -346,23 +425,23 @@ code {
 <span class="p">}</span>
 </code></pre></div>
 
-<h4>Дополнительные замечания</h4>
+<h4 id="_16">Дополнительные замечания</h4>
 <ul>
 <li><strong>CSRF-токен</strong>: В запросе передается заголовок X-CSRFTOKEN, который используется для защиты от CSRF-атак. Убедитесь, что токен актуален.</li>
 <li><strong>Формат данных</strong>: Запрос и ответ передаются в формате JSON.</li>
 <li><strong>Проверка данных</strong>: Убедитесь, что передаваемые данные (ID банка, реквизитов и сумма) корректны и существуют в системе.</li>
 <li><strong>Обработка ошибок</strong>: В случае ошибки 401 проверьте авторизацию. Если проблема сохраняется, обратитесь в техническую поддержку.</li>
 </ul>
-<h4>Рекомендации по использованию</h4>
+<h4 id="_17">Рекомендации по использованию</h4>
 <ul>
 <li><strong>Проверка данных</strong>: Перед созданием сделки убедитесь, что все переданные данные (ID банка, реквизитов) существуют и корректны.</li>
 <li><strong>Обработка статусов</strong>: После создания сделки отслеживайте её статус (например, created, pending, completed).</li>
 <li><strong>Защита от CSRF</strong>: Убедитесь, что CSRF-токен передается в каждом запросе, где это требуется.</li>
 </ul>
-<h3>Получение информации о сделке</h3>
+<h3 id="_18">Получение информации о сделке</h3>
 <p><strong>Адрес</strong>: <code>fiats/deals/{id}/</code><br />
 <strong>Метод</strong>: <code>GET</code></p>
-<h4>Параметры</h4>
+<h4 id="_19">Параметры</h4>
 <table>
 <thead>
 <tr>
@@ -381,13 +460,13 @@ code {
 </tr>
 </tbody>
 </table>
-<h4>Пример запроса</h4>
+<h4 id="_20">Пример запроса</h4>
 <div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="s1">&#39;https://our-domain/api/v1/fiats/deals/1/&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;accept: application/json&#39;</span>
 </code></pre></div>
 
-<h4>Пример ответа</h4>
+<h4 id="_21">Пример ответа</h4>
 <p><strong>Успешный ответ (код 200)</strong>:</p>
 <div class="codehilite"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
@@ -460,11 +539,11 @@ code {
 <span class="p">}</span>
 </code></pre></div>
 
-<h2>Работа с профилями</h2>
-<h3>Получение информации о профиле</h3>
+<h2 id="_22">Работа с профилями</h2>
+<h3 id="_23">Получение информации о профиле</h3>
 <p><strong>Адрес</strong>: <code>fiats/profiles/{id}/</code><br />
 <strong>Метод</strong>: <code>GET</code></p>
-<h4>Параметры</h4>
+<h4 id="_24">Параметры</h4>
 <table>
 <thead>
 <tr>
@@ -483,14 +562,14 @@ code {
 </tr>
 </tbody>
 </table>
-<h4>Пример запроса</h4>
+<h4 id="_25">Пример запроса</h4>
 <div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="s1">&#39;https://our-domain/api/v1/fiats/profiles/12345/&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;accept: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;access_token&gt;&#39;</span>
 </code></pre></div>
 
-<h4>Пример ответа</h4>
+<h4 id="_26">Пример ответа</h4>
 <p><strong>Успешный ответ (код 200)</strong>:</p>
 <div class="codehilite"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
@@ -553,11 +632,11 @@ code {
 <span class="p">}</span>
 </code></pre></div>
 
-<h2>Работа с устройствами</h2>
-<h3>Получение информации об устройстве</h3>
+<h2 id="_27">Работа с устройствами</h2>
+<h3 id="_28">Получение информации об устройстве</h3>
 <p><strong>Адрес</strong>: <code>fiats/devices/{id}/</code><br />
 <strong>Метод</strong>: <code>GET</code></p>
-<h4>Параметры</h4>
+<h4 id="_29">Параметры</h4>
 <table>
 <thead>
 <tr>
@@ -576,14 +655,14 @@ code {
 </tr>
 </tbody>
 </table>
-<h4>Пример запроса</h4>
+<h4 id="_30">Пример запроса</h4>
 <div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span><span class="s1">&#39;GET&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="s1">&#39;https://our-domain/api/v1/fiats/devices/12345/&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;accept: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;access_token&gt;&#39;</span>
 </code></pre></div>
 
-<h4>Пример ответа</h4>
+<h4 id="_31">Пример ответа</h4>
 <p><strong>Успешный ответ (код 200)</strong>:</p>
 <div class="codehilite"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
@@ -656,7 +735,7 @@ code {
 <span class="p">}</span>
 </code></pre></div>
 
-<h2>Обработка ошибок</h2>
+<h2 id="_32">Обработка ошибок</h2>
 <p>API FinoraPay возвращает стандартные HTTP-коды состояния для индикации успеха или неудачи запроса. Ниже приведены основные коды состояния и их значения:</p>
 <table>
 <thead>
@@ -694,7 +773,7 @@ code {
 <span class="p">}</span>
 </code></pre></div>
 
-<h2>Рекомендации по безопасности</h2>
+<h2 id="_33">Рекомендации по безопасности</h2>
 <p>При работе с API FinoraPay необходимо соблюдать следующие рекомендации по безопасности:</p>
 <ol>
 <li>
@@ -713,10 +792,10 @@ code {
 <p><strong>Минимизация данных</strong>: Запрашивайте и передавайте только необходимые данные, избегая излишнего раскрытия информации.</p>
 </li>
 </ol>
-<h2>Примеры на различных языках</h2>
+<h2 id="_34">Примеры на различных языках</h2>
 <p>Ниже приведены примеры использования API FinoraPay на различных языках программирования.</p>
-<h3>PHP</h3>
-<h4>Пример аутентификации</h4>
+<h3 id="php">PHP</h3>
+<h4 id="_35">Пример аутентификации</h4>
 <div class="codehilite"><pre><span></span><code><span class="cp">&lt;?php</span>
 <span class="c1">// Аутентификация и получение токенов доступа</span>
 <span class="k">function</span> <span class="nf">authenticate</span><span class="p">(</span><span class="nv">$login</span><span class="p">,</span> <span class="nv">$password</span><span class="p">)</span> <span class="p">{</span>
@@ -765,7 +844,7 @@ code {
 <span class="cp">?&gt;</span>
 </code></pre></div>
 
-<h4>Пример создания сделки</h4>
+<h4 id="_36">Пример создания сделки</h4>
 <div class="codehilite"><pre><span></span><code><span class="cp">&lt;?php</span>
 <span class="k">function</span> <span class="nf">createDeal</span><span class="p">(</span><span class="nv">$accessToken</span><span class="p">,</span> <span class="nv">$bankId</span><span class="p">,</span> <span class="nv">$requisiteId</span><span class="p">,</span> <span class="nv">$amount</span><span class="p">)</span> <span class="p">{</span>
     <span class="nv">$url</span> <span class="o">=</span> <span class="s1">&#39;https://our-domain/api/v1/fiats/deals/&#39;</span><span class="p">;</span>
@@ -803,8 +882,8 @@ code {
 <span class="cp">?&gt;</span>
 </code></pre></div>
 
-<h3>Node.js</h3>
-<h4>Пример аутентификации</h4>
+<h3 id="nodejs">Node.js</h3>
+<h4 id="_37">Пример аутентификации</h4>
 <div class="codehilite"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;axios&#39;</span><span class="p">);</span>
 
 <span class="c1">// Аутентификация и получение токенов доступа</span>
@@ -843,7 +922,7 @@ code {
 <span class="p">})();</span>
 </code></pre></div>
 
-<h4>Пример создания сделки</h4>
+<h4 id="_38">Пример создания сделки</h4>
 <div class="codehilite"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;axios&#39;</span><span class="p">);</span>
 
 <span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">createDeal</span><span class="p">(</span><span class="nx">accessToken</span><span class="p">,</span><span class="w"> </span><span class="nx">bankId</span><span class="p">,</span><span class="w"> </span><span class="nx">requisiteId</span><span class="p">,</span><span class="w"> </span><span class="nx">amount</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -872,8 +951,8 @@ code {
 <span class="p">}</span>
 </code></pre></div>
 
-<h3>Golang</h3>
-<h4>Пример аутентификации</h4>
+<h3 id="golang">Golang</h3>
+<h4 id="_39">Пример аутентификации</h4>
 <div class="codehilite"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
@@ -951,8 +1030,8 @@ code {
 <span class="p">}</span>
 </code></pre></div>
 
-<h3>Python</h3>
-<h4>Пример аутентификации</h4>
+<h3 id="python">Python</h3>
+<h4 id="_40">Пример аутентификации</h4>
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 
@@ -990,7 +1069,7 @@ code {
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ошибка: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 
-<h4>Пример создания сделки</h4>
+<h4 id="_41">Пример создания сделки</h4>
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 
@@ -1021,5 +1100,6 @@ code {
 
 <hr />
 <p>© 2025 FinoraPay. Все права защищены.</p>
+    <div id="backToTop" class="back-to-top" onclick="scrollToTop()">↑</div>
 </body>
 </html>
