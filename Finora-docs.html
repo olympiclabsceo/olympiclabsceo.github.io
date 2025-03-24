@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinoraPay API Documentation</title>
+    <title>PayRapt API Documentation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,7 +16,7 @@
             background-color: #f8f9fa;
         }
         h1, h2, h3, h4, h5, h6 {
-            color: #5e35b1;
+            color: #2e7d32;
             margin-top: 24px;
             margin-bottom: 16px;
             font-weight: 600;
@@ -47,14 +47,14 @@
             border-radius: 3px;
             padding: 0.2em 0.4em;
             font-family: Consolas, Monaco, 'Andale Mono', monospace;
-            color: #5e35b1;
+            color: #2e7d32;
         }
         pre code {
             background-color: transparent;
             padding: 0;
         }
         blockquote {
-            border-left: 4px solid #3f51b5;
+            border-left: 4px solid #43a047;
             padding: 0 15px;
             margin: 16px 0;
             color: #777;
@@ -72,14 +72,14 @@
             text-align: left;
         }
         th {
-            background-color: #e8eaf6;
+            background-color: #e8f5e9;
             color: #333;
         }
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
         a {
-            color: #3f51b5;
+            color: #43a047;
             text-decoration: none;
         }
         a:hover {
@@ -89,8 +89,8 @@
             max-width: 100%;
         }
         .highlight {
-            background-color: #e8eaf6;
-            border-left: 4px solid #3f51b5;
+            background-color: #e8f5e9;
+            border-left: 4px solid #43a047;
             padding: 10px;
             margin: 20px 0;
         }
@@ -113,7 +113,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background-color: #5e35b1;
+            background-color: #2e7d32;
             color: white;
             border-radius: 50%;
             width: 50px;
@@ -175,24 +175,25 @@
     </script>
 </head>
 <body>
-    <h1 id="api-finorapay">Документация API платформы FinoraPay</h1>
-    <p><img alt="FinoraPay Logo" src="https://finorapay.io/img/logo_white.svg" style="background: black; width: 300px; height: 100px;" /></p>
+    <h1 id="api-payrapt">Документация API платформы PayRapt</h1>
+<p><img alt="PayRapt Logo" src="https://payrapt.io/img/logo_white.svg" /></p>
+<style>
 body {
   background-color: #f8f9fa;
 }
 h1, h2, h3 {
-  color: #5e35b1;
+  color: #2e7d32;
 }
 a {
-  color: #3f51b5;
+  color: #43a047;
 }
 .highlight {
-  background-color: #e8eaf6;
-  border-left: 4px solid #3f51b5;
+  background-color: #e8f5e9;
+  border-left: 4px solid #43a047;
   padding: 10px;
 }
 code {
-  color: #5e35b1;
+  color: #2e7d32;
 }
 </style>
 
@@ -213,10 +214,10 @@ code {
 <li><a href="#примеры-на-различных-языках">Примеры на различных языках</a></li>
 </ul>
 <h2 id="_2">Введение</h2>
-<p>FinoraPay API представляет собой комплексный интерфейс для взаимодействия с платформой одноранговых финансовых операций (P2P). API построен на архитектуре REST и использует стандартные HTTP-методы для выполнения операций над ресурсами. Взаимодействие с API осуществляется через защищенное соединение HTTPS, что гарантирует безопасность передаваемых данных.</p>
-<p>Данная документация содержит подробное описание всех доступных эндпоинтов, методов, параметров и формата ответов, необходимых для интеграции с платформой FinoraPay. Примеры запросов и ответов включены для каждого метода API, что позволяет быстрее понять принципы работы с платформой.</p>
+<p>PayRapt API представляет собой комплексный интерфейс для взаимодействия с платформой одноранговых финансовых операций (P2P). API построен на архитектуре REST и использует стандартные HTTP-методы для выполнения операций над ресурсами. Взаимодействие с API осуществляется через защищенное соединение HTTPS, что гарантирует безопасность передаваемых данных.</p>
+<p>Данная документация содержит подробное описание всех доступных эндпоинтов, методов, параметров и формата ответов, необходимых для интеграции с платформой PayRapt. Примеры запросов и ответов включены для каждого метода API, что позволяет быстрее понять принципы работы с платформой.</p>
 <h2 id="api">Структура API</h2>
-<p>API-интерфейс FinoraPay организован вокруг нескольких основных ресурсов:</p>
+<p>API-интерфейс PayRapt организован вокруг нескольких основных ресурсов:</p>
 <ul>
 <li><strong>Пользователи</strong>: управление пользовательскими аккаунтами, аутентификация, обновление токенов.</li>
 <li><strong>Сделки</strong>: создание, просмотр и управление транзакциями между пользователями.</li>
@@ -739,7 +740,7 @@ code {
 </code></pre></div>
 
 <h2 id="_32">Обработка ошибок</h2>
-<p>API FinoraPay возвращает стандартные HTTP-коды состояния для индикации успеха или неудачи запроса. Ниже приведены основные коды состояния и их значения:</p>
+<p>API PayRapt возвращает стандартные HTTP-коды состояния для индикации успеха или неудачи запроса. Ниже приведены основные коды состояния и их значения:</p>
 <table>
 <thead>
 <tr>
@@ -777,7 +778,7 @@ code {
 </code></pre></div>
 
 <h2 id="_33">Рекомендации по безопасности</h2>
-<p>При работе с API FinoraPay необходимо соблюдать следующие рекомендации по безопасности:</p>
+<p>При работе с API PayRapt необходимо соблюдать следующие рекомендации по безопасности:</p>
 <ol>
 <li>
 <p><strong>Защита токенов</strong>: Храните access и refresh токены в защищенном месте. Не передавайте их в открытом виде через незащищенные каналы связи.</p>
@@ -796,7 +797,7 @@ code {
 </li>
 </ol>
 <h2 id="_34">Примеры на различных языках</h2>
-<p>Ниже приведены примеры использования API FinoraPay на различных языках программирования.</p>
+<p>Ниже приведены примеры использования API PayRapt на различных языках программирования.</p>
 <h3 id="php">PHP</h3>
 <h4 id="_35">Пример аутентификации</h4>
 <div class="codehilite"><pre><span></span><code><span class="cp">&lt;?php</span>
@@ -1102,7 +1103,7 @@ code {
 </code></pre></div>
 
 <hr />
-<p>© 2025 FinoraPay. Все права защищены.</p>
+<p>© 2025 PayRapt. Все права защищены.</p>
     <div id="backToTop" class="back-to-top" onclick="scrollToTop()">↑</div>
 </body>
 </html>
